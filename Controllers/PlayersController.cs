@@ -1,6 +1,7 @@
 ﻿using AppEquiposBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,12 +20,18 @@ namespace AppEquiposBackend.Controllers
         }
         // GET: api/<PlayersController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string keyword = "")
         {
 
             try
             {
-                var players = await _context.Players
+                var players = await _context.Players.Where(x => keyword.IsNullOrEmpty() ||
+                    (!keyword.IsNullOrEmpty() &&
+                        (x.FirstName.ToLower().Contains(keyword.ToLower()) ||
+                         x.LastName.ToLower().Contains(keyword.ToLower())
+                        )
+                    )
+                )
                 .Include(j => j.Team)//garantiza que los Equipodatos relacionados (del equipo) también se carguen con cada jugador.
                 .Select(j => new       //se utiliza para proyectar los datos en un nuevo objeto anónimo, seleccionando propiedades específicas de la Jugadoresentidad.
                 {
@@ -107,6 +114,8 @@ namespace AppEquiposBackend.Controllers
                 {
                     return BadRequest($"No existe un equipo con el ID: {player.TeamId}");
                 }
+
+                
 
                 // Asigna el equipo al jugador
                 player.Team = team;

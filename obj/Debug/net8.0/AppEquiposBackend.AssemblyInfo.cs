@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AppEquiposBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bc7757d86b39151fea1566ced5412652a7cd6e68")]
 [assembly: System.Reflection.AssemblyProductAttribute("AppEquiposBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AppEquiposBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
