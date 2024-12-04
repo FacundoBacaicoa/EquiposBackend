@@ -166,3 +166,4 @@ D:\Proyectos C\Angular\AppEquiposBackend\AppEquiposBackend\obj\Debug\net8.0\refi
 D:\Proyectos C\Angular\AppEquiposBackend\AppEquiposBackend\obj\Debug\net8.0\AppEquiposBackend.pdb
 D:\Proyectos C\Angular\AppEquiposBackend\AppEquiposBackend\obj\Debug\net8.0\AppEquiposBackend.genruntimeconfig.cache
 D:\Proyectos C\Angular\AppEquiposBackend\AppEquiposBackend\obj\Debug\net8.0\ref\AppEquiposBackend.dll
+D:\Proyectos C\Angular\AppEquiposBackend\AppEquiposBackend\obj\Debug\net8.0\AppEquiposBackend.sourcelink.json

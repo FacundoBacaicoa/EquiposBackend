@@ -1,6 +1,7 @@
 ﻿using AppEquiposBackend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,11 +19,13 @@ namespace AppEquiposBackend.Controllers
         }
         // GET: api/<TeamsController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string keyword = "")
         {
             try
             {
-                var listTeams = await _context.Teams.ToListAsync();
+                var listTeams = await _context.Teams.Where(x => keyword.IsNullOrEmpty() ||
+                (!keyword.IsNullOrEmpty() && x.Name.ToLower().Contains(keyword.ToLower())))
+                .ToListAsync();
                 return Ok(listTeams);
             }
             catch (Exception e)
@@ -57,8 +60,13 @@ namespace AppEquiposBackend.Controllers
         {
             try
             {
-                if (await _context.Teams.AnyAsync(x => x.Name.Contains(team.Name)))
+                // Verifica si ya existe un equipo con el mismo nombre, ciudad y país
+                if (await _context.Teams.AnyAsync(x =>
+                    x.Name.ToLower() == team.Name.ToLower() &&
+                    x.City.ToLower() == team.City.ToLower() &&
+                    x.Country.ToLower() == team.Country.ToLower()))
                 {
+
                     return NotFound(new { message = "el equipo ya existe" });
                 }
                 _context.Add(team);
@@ -79,14 +87,20 @@ namespace AppEquiposBackend.Controllers
         {
             try
             {
-
+                // Validar si el ID de la URL coincide con el ID del objeto
                 if (id != team.Id)
                 {
                     return NotFound();
                 }
-                else if (await _context.Teams.AnyAsync(x => x.Name.Contains(team.Name) && x.Id != id))
+
+                // Verificar si ya existe otro equipo con el mismo nombre, ciudad y país
+                if (await _context.Teams.AnyAsync(x =>
+                    x.Name.ToLower() == team.Name.ToLower() &&
+                    x.City.ToLower() == team.City.ToLower() &&
+                    x.Country.ToLower() == team.Country.ToLower() &&
+                    x.Id != id)) // Ignorar el mismo equipo que se está actualizando
                 {
-                    return NotFound(new { message = "Ya existe un equipo con ese nombre" });
+                    return NotFound(new { message = "Ya existe otro equipo con el mismo nombre, país y ciudad" });
                 }
                 _context.Update(team);
                 await _context.SaveChangesAsync();
